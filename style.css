@@ -1,0 +1,26 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(to right, #add8e6, #dda0dd); /* Light blue to light purple gradient */
+    color: #333;
+}
+
+header, section {
+    padding: 20px;
+    margin: 20px;
+    background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white for content areas */
+    border-radius: 8px;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    header, section {
+        margin: 10px;
+        padding: 10px;
+    }
+}
