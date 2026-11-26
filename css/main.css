@@ -1,0 +1,877 @@
+/* ==========================================================================
+   Carlos Cerritos Lira — personal site
+   Hand-written styles, no framework. Sections: tokens, base, nav, hero,
+   resume sections (experience / education), contact, footer, print.
+   ========================================================================== */
+
+/* ---------- Tokens ---------- */
+:root {
+  --bg: #ffffff;
+  --surface: #f6f7f9;
+  --ink: #0b1220;        /* headings, primary button, contact card */
+  --text: #475467;       /* body copy */
+  --text-strong: #344054;
+  --muted: #667085;      /* dates, labels */
+  --line: #e4e7ec;       /* hairlines and borders */
+  --line-strong: #d0d5dd;
+  --accent: #0062d3;
+
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+
+  --container: 1040px;
+  --gutter: clamp(20px, 5vw, 40px);
+  --nav-offset: 88px;    /* space the floating nav needs above an anchored section */
+  --section-pad: clamp(48px, 7vw, 80px);
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, p, ol, ul, figure {
+  margin: 0;
+}
+
+ol, ul {
+  padding: 0;
+  list-style: none;
+}
+
+img, svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: #cfe3ff;
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.container {
+  width: 100%;
+  max-width: calc(var(--container) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+/* Small uppercase label used above the name and in the contact card */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Inline text links */
+.lead a,
+.entry-points a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(0, 98, 211, 0.35);
+  transition: text-decoration-color 0.2s;
+}
+
+.lead a:hover,
+.entry-points a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* ---------- Navigation (floating pill) ---------- */
+.site-nav {
+  position: fixed;
+  top: 16px;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  justify-content: center;
+  padding-inline: 8px;
+  pointer-events: none; /* only the pill itself is clickable */
+}
+
+.site-nav nav {
+  pointer-events: auto;
+  display: flex;
+  gap: 2px;
+  max-width: 100%;
+  padding: 5px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  -webkit-backdrop-filter: saturate(180%) blur(14px);
+  backdrop-filter: saturate(180%) blur(14px);
+  box-shadow: 0 1px 2px rgba(11, 18, 32, 0.04), 0 10px 28px -14px rgba(11, 18, 32, 0.22);
+}
+
+.site-nav nav::-webkit-scrollbar {
+  display: none;
+}
+
+.site-nav a {
+  padding: 8px 16px;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  line-height: 1.25;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.site-nav a:hover {
+  color: var(--ink);
+}
+
+.site-nav a.is-active {
+  background: #eef0f4;
+  color: var(--ink);
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  padding: clamp(112px, 16vh, 160px) 0 clamp(56px, 9vh, 96px);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(40px, 6vw, 88px);
+}
+
+.hero-text {
+  container-type: inline-size; /* lets the name scale with its column */
+}
+
+.hero h1 {
+  margin: 20px 0 24px;
+  color: var(--ink);
+  font-size: clamp(2.5rem, 8vw, 4.5rem);    /* fallback */
+  font-size: clamp(2.25rem, 13.5cqi, 4.5rem);
+  font-weight: 650;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.hero h1 span {
+  display: block;
+}
+
+.lead {
+  max-width: 34em;
+  font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background-color 0.2s, border-color 0.2s, transform 0.2s var(--ease), box-shadow 0.2s;
+}
+
+.btn:hover {
+  border-color: #98a2b3;
+  background: var(--surface);
+  transform: translateY(-1px);
+}
+
+.btn:active {
+  transform: none;
+}
+
+.btn-primary {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(11, 18, 32, 0.2);
+}
+
+.btn-primary:hover {
+  border-color: #1d2939;
+  background: #1d2939;
+  box-shadow: 0 8px 20px -8px rgba(11, 18, 32, 0.5);
+}
+
+.portrait {
+  width: clamp(224px, 30vw, 380px);
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 28px;
+  background: #dbe3ee;
+  box-shadow: 0 0 0 1px rgba(11, 18, 32, 0.06), 0 28px 56px -28px rgba(11, 18, 32, 0.45);
+}
+
+.portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Zoom in on the subject; the origin is the point that stays fixed while zooming. */
+  transform: scale(1.5);
+  transform-origin: 51% 78%;
+}
+
+/* ---------- Resume sections (label on the left, content on the right) ---------- */
+.section {
+  /* a nav click lands with the section title exactly where it sticks */
+  scroll-margin-top: calc(var(--nav-offset) - var(--section-pad));
+}
+
+.section-grid {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 56px;
+  padding-block: var(--section-pad);
+  border-top: 1px solid var(--line);
+}
+
+.section-title {
+  position: sticky;
+  top: var(--nav-offset);
+  align-self: start;
+  color: var(--ink);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+/* One row per job / school: logo tile on the left, details on the right */
+.entry {
+  position: relative;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  column-gap: 20px;
+  padding-bottom: 44px;
+}
+
+.entry:last-child {
+  padding-bottom: 0;
+}
+
+/* Timeline connector running from one logo tile down to the next */
+.entry:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: 64px;
+  bottom: 8px;
+  left: 28px;
+  width: 1px;
+  background: var(--line);
+  transform: translateX(-50%);
+}
+
+.entry-logo {
+  width: 56px;
+  height: 56px;
+  padding: var(--logo-pad, 10px);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(11, 18, 32, 0.05);
+}
+
+.entry-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Left: employer, then role. Right: dates, then location. Bullets span both. */
+.entry-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 24px;
+  align-items: baseline;
+  padding-top: 4px;
+}
+
+.entry-org {
+  grid-area: 1 / 1;
+  color: var(--ink);
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.entry-role {
+  grid-area: 2 / 1;
+  margin-top: 1px;
+  color: var(--text-strong);
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+/* Optional team / org shown after the role, e.g. "Software Engineer 2 · Azure AI Speech, CoreAI" */
+.entry-team {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.entry-team::before {
+  content: "·";
+  margin-inline: 0.15em 0.4em; /* the markup already has a space before it */
+}
+
+/* The wrapper dissolves so dates and location can sit in the grid's right column */
+.entry-meta {
+  display: contents;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+.entry-dates,
+.entry-place {
+  justify-self: end;
+  white-space: nowrap;
+}
+
+.entry-dates {
+  grid-area: 1 / 2;
+}
+
+.entry-place {
+  grid-area: 2 / 2;
+}
+
+.entry-points {
+  display: grid;
+  grid-area: 3 / 1 / auto / -1;
+  gap: 8px;
+  max-width: 70ch;
+  margin-top: 14px;
+}
+
+.entry-points li {
+  position: relative;
+  padding-left: 18px;
+  text-wrap: pretty;
+}
+
+.entry-points li::before {
+  content: "";
+  position: absolute;
+  top: 0.7em;
+  left: 2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #c1c7d0;
+}
+
+/* Key numbers in the bullets */
+.entry-points strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* ---------- Contact ---------- */
+.section-contact {
+  padding-block: clamp(8px, 2vw, 24px) clamp(40px, 6vw, 64px);
+  scroll-margin-top: calc(var(--nav-offset) - 24px);
+}
+
+.contact-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(28px, 6vw, 72px);
+  padding: clamp(28px, 5.5vw, 60px);
+  overflow: hidden;
+  border-radius: 28px;
+  background: var(--ink);
+  color: #fff;
+}
+
+/* Soft glow in the corner of the card */
+.contact-card::before {
+  content: "";
+  position: absolute;
+  bottom: -55%;
+  left: -12%;
+  width: 62%;
+  aspect-ratio: 1;
+  background: radial-gradient(closest-side, rgba(0, 98, 211, 0.5), rgba(0, 98, 211, 0));
+  pointer-events: none;
+}
+
+.contact-card > * {
+  position: relative;
+}
+
+.contact-card .eyebrow {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.contact-card h2 {
+  margin-top: 14px;
+  color: #fff;
+  font-size: clamp(2.25rem, 1.5rem + 3vw, 3.25rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+.contact-links a {
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 14px;
+  padding: 18px 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  color: #fff;
+  text-decoration: none;
+}
+
+.contact-links li:last-child a {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.contact-label {
+  font-weight: 500;
+}
+
+.contact-value {
+  justify-self: end;
+  overflow: hidden;
+  max-width: 100%;
+  color: rgba(255, 255, 255, 0.62);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.contact-links .icon-arrow {
+  color: rgba(255, 255, 255, 0.5);
+  transition: transform 0.25s var(--ease), color 0.2s;
+}
+
+.contact-links a:hover .contact-value {
+  color: #fff;
+}
+
+.contact-links a:hover .icon-arrow {
+  color: #fff;
+  transform: translate(2px, -2px);
+}
+
+.contact-card :focus-visible {
+  outline-color: #fff;
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  padding-bottom: 40px;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.site-footer .container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+}
+
+.site-footer a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.site-footer a:hover {
+  color: var(--ink);
+}
+
+.site-footer .icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* ---------- Entrance animation (hero only) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-text > *,
+  .portrait {
+    animation: rise 0.7s var(--ease) both;
+  }
+
+  .hero-text > :nth-child(2) { animation-delay: 0.05s; }
+  .hero-text > :nth-child(3) { animation-delay: 0.1s; }
+  .hero-text > :nth-child(4) { animation-delay: 0.15s; }
+  .portrait { animation-delay: 0.1s; }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}
+
+/* ---------- Tablets: section labels move above their content ---------- */
+@media (max-width: 860px) {
+  .hero {
+    padding-top: 112px;
+  }
+
+  .actions {
+    gap: 10px;
+  }
+
+  .btn {
+    padding-inline: 15px;
+  }
+
+  .section-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .section-title {
+    position: static;
+  }
+
+  .contact-card {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+/* ---------- Small tablets and phones: the hero stacks too ---------- */
+@media (max-width: 760px) {
+  .hero {
+    padding-top: 104px;
+  }
+
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+  }
+
+  .portrait {
+    order: -1; /* photo above the name */
+    width: clamp(168px, 34vw, 240px);
+    border-radius: 24px;
+  }
+
+  .portrait img {
+    /* the photo is small here, so crop closer to the face */
+    transform: scale(2);
+    transform-origin: 53% 71%;
+  }
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 560px) {
+  .site-nav {
+    top: 12px;
+  }
+
+  .site-nav nav {
+    padding: 4px;
+  }
+
+  .site-nav a {
+    padding: 7px 11px;
+    font-size: 0.8125rem;
+  }
+
+  .hero {
+    padding-top: 88px;
+  }
+
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 28px;
+  }
+
+  .btn {
+    justify-content: center;
+    height: 46px;
+  }
+
+  .btn-primary {
+    grid-column: 1 / -1;
+  }
+
+  .entry {
+    grid-template-columns: 48px minmax(0, 1fr);
+    column-gap: 14px;
+    padding-bottom: 36px;
+  }
+
+  .entry:not(:last-child)::before {
+    top: 56px;
+    left: 24px;
+  }
+
+  .entry-logo {
+    width: 48px;
+    height: 48px;
+    padding: var(--logo-pad-sm, 8px);
+    border-radius: 12px;
+  }
+
+  /* Dates move under the role instead of sitting on the right */
+  .entry-body {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 1px;
+  }
+
+  .entry-org,
+  .entry-role,
+  .entry-points {
+    grid-area: auto;
+  }
+
+  /* Dates and location share a line under the role when they fit. If not, the location
+     wraps to its own line and its separator dot is clipped instead of dangling. */
+  .entry-meta {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 1.5em;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+
+  .entry-place {
+    position: relative;
+  }
+
+  .entry-place::before {
+    content: "·";
+    position: absolute;
+    left: -1.05em;
+  }
+
+  .entry-points {
+    margin-top: 12px;
+  }
+
+  /* team / org gets its own line under the role */
+  .entry-team {
+    display: block;
+  }
+
+  .entry-team::before {
+    content: none;
+  }
+
+  .contact-card {
+    padding: 24px;
+    border-radius: 24px;
+  }
+
+  /* Label and address stack inside each contact row */
+  .contact-links a {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "icon label arrow"
+      "icon value arrow";
+    gap: 2px 12px;
+    padding-block: 14px;
+  }
+
+  .contact-links .icon:first-child { grid-area: icon; }
+  .contact-label { grid-area: label; }
+  .contact-value { grid-area: value; justify-self: start; }
+  .contact-links .icon-arrow { grid-area: arrow; }
+}
+
+/* ---------- Very small phones ---------- */
+@media (max-width: 359px) {
+  .site-nav a {
+    padding-inline: 8px;
+  }
+
+  /* make room for the full email address */
+  .contact-links .icon-arrow {
+    display: none;
+  }
+}
+
+/* ---------- Print: a clean one-pager ---------- */
+@media print {
+  .site-nav,
+  .skip-link,
+  .actions,
+  .site-footer a {
+    display: none;
+  }
+
+  body {
+    font-size: 11pt;
+  }
+
+  .hero {
+    padding: 0 0 24px;
+  }
+
+  .hero-text > *,
+  .portrait {
+    animation: none;
+  }
+
+  .portrait {
+    width: 150px;
+    box-shadow: none;
+  }
+
+  .section-grid {
+    grid-template-columns: 130px minmax(0, 1fr);
+    gap: 24px;
+    padding-block: 24px;
+  }
+
+  .section-title {
+    position: static;
+    font-size: 14pt;
+  }
+
+  .entry {
+    padding-bottom: 20px;
+    break-inside: avoid;
+  }
+
+  .entry-logo {
+    box-shadow: none;
+  }
+
+  .contact-card {
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    color: var(--ink);
+  }
+
+  .contact-card::before {
+    display: none;
+  }
+
+  .contact-card h2,
+  .contact-links a {
+    color: var(--ink);
+  }
+
+  .contact-card .eyebrow,
+  .contact-value {
+    color: var(--muted);
+  }
+
+  .contact-links a,
+  .contact-links li:last-child a {
+    border-color: var(--line);
+  }
+}
